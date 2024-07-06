@@ -18,3 +18,22 @@ jobs:
       run: |
         echo "Running cleanup..."
         # Add your cleanup commands here
+name: Cleanup
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run cleanup script
+      run: |
+        echo "Running cleanup..."
+        # Add your cleanup commands here
