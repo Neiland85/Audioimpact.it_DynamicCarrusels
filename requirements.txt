@@ -1,0 +1,5 @@
+Flask
+requests
+SwiftMailer
+Jinja2
+PrestaShopAPI
