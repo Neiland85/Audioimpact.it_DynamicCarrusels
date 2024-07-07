@@ -1,14 +1,13 @@
-<!-- templates/emails/test_email.html -->
+<!-- templates/emails/welcome.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Email</title>
+    <title>Welcome to Audiimpact.it</title>
 </head>
 <body>
-    <h1>Hello from Audiimpact.it</h1>
-    <p>This is a test email sent from a Flask web application!</p>
+    <h1>Welcome, {{ user.name }}!</h1>
+    <p>Thank you for joining Audiimpact.it. We are thrilled to have you with us.</p>
 </body>
 </html>
 
