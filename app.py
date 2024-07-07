@@ -15,7 +15,7 @@ mail = Mail(app)
 
 @app.route('/send-email')
 def send_email():
-    msg = Message('Ciao!!Hello from Audioimpact.it team!!!',
+    msg = Message('Hello from Audiimpact.it',
                   sender='your-email@example.com',
                   recipients=['recipient@example.com'])
     msg.body = 'This is a test email sent from a Flask web application!'
@@ -24,4 +24,3 @@ def send_email():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
