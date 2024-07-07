@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from config import Config
+from prestapyt import PrestaShopWebServiceDict
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -10,6 +11,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 mail = Mail(app)
 
+# Define the CarouselItem model
 class CarouselItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String(255), nullable=False)
@@ -26,11 +28,13 @@ class CarouselItem(db.Model):
             'description': self.description
         }
 
+# Define the Contact model
 class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     name = db.Column(db.String(255), nullable=False)
 
+# Routes and API endpoints
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -103,26 +107,9 @@ def add_contact():
     db.session.commit()
     return jsonify({'message': 'Contact added successfully'}), 201
 
-@app.route('/send-carousel-update-email', methods=['POST'])
-def send_carousel_update_email():
-    data = request.json
-    contacts = Contact.query.all()
-    for contact in contacts:
-        msg = Message('New Carousel Update at Audiimpact.it',
-                      recipients=[contact.email])
-        msg.body = f'Hello {contact.name}, check out our new carousel updates on the website!'
-        mail.send(msg)
-    return jsonify({'message': 'Emails sent successfully'}), 200
-
-if __name__ == '__main__':
-    app.run(ssl_context=('certificate.crt', 'private.key'), debug=True)
-
-from prestapyt import PrestaShopWebServiceDict
-
 # Configure PrestaShop API
 PRESTASHOP_API_URL = 'http://your-prestashop-site/api'
 PRESTASHOP_API_KEY = 'your-prestashop-api-key'
-
 prestashop = PrestaShopWebServiceDict(PRESTASHOP_API_URL, PRESTASHOP_API_KEY)
 
 @app.route('/sync-prestashop-contacts')
@@ -138,4 +125,17 @@ def sync_prestashop_contacts():
             db.session.add(new_contact)
     db.session.commit()
     return jsonify({'message': 'Contacts synchronized with PrestaShop'}), 200
+
+@app.route('/send-carousel-update-email', methods=['POST'])
+def send_carousel_update_email():
+    contacts = Contact.query.all()
+    for contact in contacts:
+        msg = Message('New Carousel Update at Audiimpact.it',
+                      recipients=[contact.email])
+        msg.body = f'Hello {contact.name}, check out our new carousel updates on the website!'
+        mail.send(msg)
+    return jsonify({'message': 'Emails sent successfully'}), 200
+
+if __name__ == '__main__':
+    app.run(ssl_context=('certificate.crt', 'private.key'), debug=True)
 
