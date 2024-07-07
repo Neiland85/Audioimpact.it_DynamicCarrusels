@@ -1,4 +1,4 @@
-# app.py
+ app.py
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
@@ -35,6 +35,22 @@ class Contact(db.Model):
     name = db.Column(db.String(255), nullable=False)
 
 # Routes and API endpoints
+# app.py (continued)
+@app.route('/sync-prestashop-products')
+def sync_prestashop_products():
+    products = prestashop.get('products')
+    for product in products['products']['product']:
+        # Assuming product has 'name' and 'price' fields
+        product_data = prestashop.get(f'products/{product["id"]}')
+        new_item = CarouselItem(
+            image_url=f'static/images/{product_data["product"]["id"]}.jpg',  # Placeholder for actual image URL
+            alt_text=product_data['product']['name'],
+            title=product_data['product']['name'],
+            description=f'Price: {product_data["product"]["price"]}'
+        )
+        db.session.add(new_item)
+    db.session.commit()
+    return jsonify({'message': 'Products synchronized with PrestaShop'}), 200
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -42,7 +58,7 @@ def index():
 @app.route('/send-email')
 def send_email():
     user = {'name': 'John Doe', 'email': 'recipient@example.com'}
-    msg = Message('Welcome to Audiimpact.it',
+    msg = Message('Welcome to Audioimpact.it',
                   recipients=[user['email']])
     msg.html = render_template('emails/welcome.html', user=user)
     mail.send(msg)
