@@ -1,0 +1,11 @@
+@app.route('/gdpr-consent', methods=['POST'])
+def gdpr_consent():
+    # Logic to handle user consent
+    return 'Consent recorded!'
+
+@app.route('/gdpr-request-data', methods=['POST'])
+def gdpr_request_data():
+    # Logic to handle data access requests
+    return 'Data request processed!'
+
+

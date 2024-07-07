@@ -1,0 +1,27 @@
+/* static/css/cookieconsent.css */
+#cookieConsent {
+    background: #232323;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 9999;
+}
+.cookieConsentContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cookieTitle {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.cookieButton {
+    background: #f1d600;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
+
