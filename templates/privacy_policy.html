@@ -9,22 +9,35 @@
 <body>
     <h1>Privacy Policy</h1>
     <p>Here you can describe your privacy policy and data management practices.</p>
+
+    <h2>Manage Your Data</h2>
     <form id="dataRequestForm">
-        <label for="email">Enter your email to request your data:</label>
+        <label for="email">Enter your email to manage your data:</label>
         <input type="email" id="email" name="email" required>
+        
+        <label for="requestType">Select request type:</label>
+        <select id="requestType" name="requestType" required>
+            <option value="request_data">Request Data</option>
+            <option value="delete_data">Delete Data</option>
+        </select>
+        
         <button type="submit">Submit</button>
     </form>
+
     <div id="responseMessage"></div>
+
     <script>
         document.getElementById('dataRequestForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const email = document.getElementById('email').value;
+            const requestType = document.getElementById('requestType').value;
+
             fetch('/data-request', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email })
+                body: JSON.stringify({ email: email, request_type: requestType })
             })
             .then(response => response.json())
             .then(data => {

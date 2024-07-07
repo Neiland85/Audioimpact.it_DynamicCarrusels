@@ -27,9 +27,19 @@ def privacy_policy():
 
 @app.route('/data-request', methods=['POST'])
 def data_request():
-    user_email = request.form['email']
-    # Implement logic to handle user data request
-    return jsonify({'message': 'Data request received for {}'.format(user_email)})
+    request_data = request.json
+    user_email = request_data.get('email')
+    request_type = request_data.get('request_type')
+
+    # Implement logic to handle user data request or deletion
+    if request_type == 'request_data':
+        # Logic to retrieve user data
+        response_message = f'Data request received for {user_email}. We will process it and get back to you soon.'
+    elif request_type == 'delete_data':
+        # Logic to delete user data
+        response_message = f'Deletion request received for {user_email}. We will process it and delete your data.'
+
+    return jsonify({'message': response_message})
 
 if __name__ == '__main__':
     app.run(debug=True)
