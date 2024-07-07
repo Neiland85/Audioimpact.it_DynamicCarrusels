@@ -1,0 +1,35 @@
+<!-- templates/manage_carousels.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Carousels - Audiimpact.it</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage_carousels.css') }}">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Manage Carousels</h1>
+        <form id="carouselForm">
+            <div class="form-group">
+                <label for="imageUrl">Image URL</label>
+                <input type="url" class="form-control" id="imageUrl" name="imageUrl" required>
+            </div>
+            <div class="form-group">
+                <label for="altText">Alt Text</label>
+                <input type="text" class="form-control" id="altText" name="altText" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Carousel Item</button>
+        </form>
+        <hr>
+        <h2>Current Carousel Items</h2>
+        <ul id="carouselList" class="list-group">
+            <!-- Dynamic Carousel Items will be injected here -->
+        </ul>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/manage_carousels.js') }}"></script>
+</body>
+</html>
