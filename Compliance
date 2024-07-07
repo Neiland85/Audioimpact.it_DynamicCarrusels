@@ -1,0 +1,6 @@
+# Create and populate the compliance file
+echo "# Compliance\nThis document describes how the application complies with relevant data protection regulations and best practices." > compliance
+
+# Commit the changes
+git add compliance
+git commit -m "Add Compliance document"
