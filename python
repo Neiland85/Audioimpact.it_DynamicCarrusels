@@ -1,0 +1,56 @@
+# migrate_audioimpact_to_prestashop_v1.py
+
+import psycopg2
+import requests
+
+# Configuration for source database (Audioimpact)
+source_db_config = {
+    'host': 'source_db_host',
+    'database': 'audioimpact_db',
+    'user': 'db_user',
+    'password': 'db_password'
+}
+
+# Configuration for target system (Prestashop API)
+prestashop_api_url = 'https://your-prestashop-site.com/api'
+prestashop_api_key = 'your_prestashop_api_key'
+
+def fetch_data_from_source():
+    try:
+        connection = psycopg2.connect(**source_db_config)
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, name, price, description FROM products")
+        data = cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return data
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        return []
+
+def migrate_data_to_prestashop(data):
+    headers = {
+        'Authorization': f'Basic {prestashop_api_key}',
+        'Content-Type': 'application/json'
+    }
+    for record in data:
+        product_data = {
+            'product': {
+                'name': [{'language': {'id': 1, 'value': record[1]}}],
+                'price': record[2],
+                'description': [{'language': {'id': 1, 'value': record[3]}}],
+                # Map other fields as necessary
+            }
+        }
+        response = requests.post(f"{prestashop_api_url}/products", json=product_data, headers=headers)
+        if response.status_code == 201:
+            print(f"Successfully migrated product ID: {record[0]}")
+        else:
+            print(f"Failed to migrate product ID: {record[0]} - {response.text}")
+
+if __name__ == "__main__":
+    data = fetch_data_from_source()
+    if data:
+        migrate_data_to_prestashop(data)
+    else:
+        print("No data to migrate.")
